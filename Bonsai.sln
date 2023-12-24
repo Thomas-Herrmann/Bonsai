@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonsai", "Bonsai\Bonsai\Bonsai.csproj", "{665DAC0E-85D2-436E-96CD-BEDB2521B074}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonsai.Client", "Bonsai\Bonsai.Client\Bonsai.Client.csproj", "{BD97F0CA-00D0-49BA-8BB4-535047EAFF98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{665DAC0E-85D2-436E-96CD-BEDB2521B074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{665DAC0E-85D2-436E-96CD-BEDB2521B074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{665DAC0E-85D2-436E-96CD-BEDB2521B074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{665DAC0E-85D2-436E-96CD-BEDB2521B074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD97F0CA-00D0-49BA-8BB4-535047EAFF98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD97F0CA-00D0-49BA-8BB4-535047EAFF98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD97F0CA-00D0-49BA-8BB4-535047EAFF98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD97F0CA-00D0-49BA-8BB4-535047EAFF98}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9A4576AE-1A58-473E-9B45-72FC784A072D}
+	EndGlobalSection
+EndGlobal
