@@ -1,6 +1,7 @@
 using Bonsai.Client.Pages;
 using Bonsai.Components;
 using Bonsai.Components.Goals.Details;
+using Bonsai.Components.Goals.Summary;
 using Bonsai.Injection;
 using Bonsai.Model;
 
@@ -20,6 +21,8 @@ namespace Bonsai
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents()
                 .AddInteractiveWebAssemblyComponents();
+
+            builder.Services.AddCascadingValue(_ => container);
 
             var app = builder.Build();
 
@@ -51,6 +54,7 @@ namespace Bonsai
         private static void RegisterComponents(ComponentInjector injector)
         {
             injector.For<AssignmentGoal>().OfKind<IGoalDetailsComponent<AssignmentGoal>>().Inject<AssignmentDetails>();
+            injector.For<AssignmentGoal>().OfKind<IListSummaryGoalComponent<AssignmentGoal>>().Inject<AssignmentListSummary>();
         }
     }
 }

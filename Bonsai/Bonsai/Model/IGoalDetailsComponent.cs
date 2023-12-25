@@ -1,6 +1,6 @@
 ﻿namespace Bonsai.Model
 {
-    public interface IGoalDetailsComponent<TGoal> : IGoalComponent<TGoal> where TGoal : AssignmentGoal
+    public interface IGoalDetailsComponent<TGoal> : IViewGoalComponent<TGoal> where TGoal : Goal
     {
     }
 }

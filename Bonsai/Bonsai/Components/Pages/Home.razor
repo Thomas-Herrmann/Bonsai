@@ -1,7 +1,23 @@
 ﻿@page "/"
+@using Bonsai.Injection
+@using Bonsai.Model
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Goals</PageTitle>
 
-<h1>Hello, world!</h1>
+<table class="table">
+	<tbody>
+		@foreach (Goal goal in goals)
+		{
+			<tr>
+				<DynamicComponent Type="@(Container.For(goal.GetType()).ResolveKind(typeof(IListSummaryGoalComponent<>).MakeGenericType(goal.GetType())))" Parameters="@(new Dictionary<string, object> { {"Goal", goal} })" />
+			</tr>
+		}
+	</tbody>
+</table>
 
-Welcome to your new app.
+@code {
+	private IReadOnlyList<Goal> goals = new List<Goal>() { new AssignmentGoal(), new AssignmentGoal() };
+
+	[CascadingParameter]
+	public ComponentInjector? Container { get; set; }
+}
