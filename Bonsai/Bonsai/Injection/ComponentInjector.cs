@@ -30,7 +30,7 @@ namespace Bonsai.Injection
 		{
 			if (kindType is null || !kindType.IsInterface) throw new InvalidOperationException(); // TODO: injection exception
 
-			if (!kindType.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == typeof(IGoalComponent<>))) throw new InvalidOperationException(); // TODO: injection exception!
+			if (!kindType.GetInterfaces().Any(_ => _.GetGenericTypeDefinition() == typeof(IGoalComponent<>))) throw new InvalidOperationException(); // TODO: injection exception!
 
 			return componentRegistrationMapping.Where(_ => _.Key.GetGenericTypeDefinition() == kindType).SelectMany(_ => _.Value.Keys);
 		}
