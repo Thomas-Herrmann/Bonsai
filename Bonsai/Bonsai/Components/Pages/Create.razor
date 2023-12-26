@@ -7,16 +7,18 @@
 <table class="table">
 	<tbody>
 		<tr>
-		@foreach (Type type in Container!.GetSupportedGoalTypes(typeof(IGoalEditorComponent<>)))
-		{
-			try
+			@foreach (Type type in Container!.GetSupportedGoalTypes(typeof(IGoalEditorComponent<>)))
 			{
-				<td>
-					<img src="@Container.ResolveMeta(type).IconPath" />
-				</td>
+				try
+				{
+					GoalMeta meta = Container!.ResolveMeta(type);
+
+					<td>
+						<img src="@meta.IconPath" /> @meta.Name
+					</td>
+				}
+				catch (InvalidOperationException) { } // TODO: injection exception
 			}
-			catch (InvalidOperationException) { } // TODO: injection exception
-		}
 		</tr>
 	</tbody>
 </table>
