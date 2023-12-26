@@ -1,7 +1,8 @@
 ﻿namespace Bonsai.Model
 {
-    public class AssignmentGoal : Goal
+    public class AssignmentGoal : CompositeGoal
     {
-        public override string Title => "TODO";
-    }
+        public required DateTime Deadline { get; set; }
+        public required DateTime CommencementTime { get; set; }
+	}
 }

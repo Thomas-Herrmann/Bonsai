@@ -1,0 +1,21 @@
+﻿@page "/create"
+@using Bonsai.Components.Goals
+@using Bonsai.Injection
+
+<h3>Create</h3>
+
+<table class="table">
+	<tbody>
+		@foreach (Type type in Container!.GetSupportedGoalTypes(typeof(IGoalEditorComponent<>)))
+		{
+			<tr>
+				@type.Name
+			</tr>
+		}
+	</tbody>
+</table>
+
+@code {
+	[CascadingParameter, EditorRequired]
+	public ComponentInjector? Container { get; set; }
+}

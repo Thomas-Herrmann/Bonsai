@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Bonsai.Components.Goals
 @using Bonsai.Injection
 @using Bonsai.Model
 
@@ -9,15 +10,19 @@
 		@foreach (Goal goal in goals)
 		{
 			<tr>
-				<DynamicComponent Type="@(Container.For(goal.GetType()).ResolveKind(typeof(IListSummaryGoalComponent<>).MakeGenericType(goal.GetType())))" Parameters="@(new Dictionary<string, object> { {"Goal", goal} })" />
+				<DynamicComponent Type="@(Container!.For(goal.GetType()).ResolveKind(typeof(IListSummaryGoalComponent<>).MakeGenericType(goal.GetType())))" Parameters="@(new Dictionary<string, object> { {"Goal", goal} })" />
 			</tr>
 		}
 	</tbody>
 </table>
 
 @code {
-	private IReadOnlyList<Goal> goals = new List<Goal>() { new AssignmentGoal(), new AssignmentGoal() };
+	private IReadOnlyList<Goal> goals = new List<Goal>() 
+	{ 
+		new AssignmentGoal { Title = "One", Deadline = DateTime.Now.AddDays(35), SubGoals = new List<Goal>(), CommencementTime = DateTime.Now.AddDays(5), Description = "Description 1" },
+		new AssignmentGoal { Title = "Two", Deadline = DateTime.UtcNow.AddDays(2), SubGoals = new List<Goal>(), CommencementTime = DateTime.Now, Description = "Description 2" } 
+	};
 
-	[CascadingParameter]
+	[CascadingParameter, EditorRequired]
 	public ComponentInjector? Container { get; set; }
 }

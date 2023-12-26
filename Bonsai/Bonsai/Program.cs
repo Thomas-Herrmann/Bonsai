@@ -1,6 +1,8 @@
 using Bonsai.Client.Pages;
 using Bonsai.Components;
+using Bonsai.Components.Goals;
 using Bonsai.Components.Goals.Details;
+using Bonsai.Components.Goals.Editor;
 using Bonsai.Components.Goals.Summary;
 using Bonsai.Injection;
 using Bonsai.Model;
@@ -55,6 +57,7 @@ namespace Bonsai
         {
             injector.For<AssignmentGoal>().OfKind<IGoalDetailsComponent<AssignmentGoal>>().Inject<AssignmentDetails>();
             injector.For<AssignmentGoal>().OfKind<IListSummaryGoalComponent<AssignmentGoal>>().Inject<AssignmentListSummary>();
+            injector.For<AssignmentGoal>().OfKind<IGoalEditorComponent<AssignmentGoal>>().Inject<AssignmentEditor>();
         }
     }
 }
