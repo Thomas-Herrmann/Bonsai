@@ -58,6 +58,7 @@ namespace Bonsai
             injector.For<AssignmentGoal>().OfKind<IGoalDetailsComponent<AssignmentGoal>>().Inject<AssignmentDetails>();
             injector.For<AssignmentGoal>().OfKind<IListSummaryGoalComponent<AssignmentGoal>>().Inject<AssignmentListSummary>();
             injector.For<AssignmentGoal>().OfKind<IGoalEditorComponent<AssignmentGoal>>().Inject<AssignmentEditor>();
+            injector.For<AssignmentGoal>().InjectMeta(new GoalMeta { Name = "Assignment", Description = "A task that must be completed due a specified deadline", IconPath = "/images/deadline.png" });
         }
     }
 }

@@ -6,15 +6,17 @@ namespace Bonsai.Injection
 	public class ComponentInjector
 	{
 		private Dictionary<Type, Dictionary<Type, Type>> componentRegistrationMapping;
+		private Dictionary<Type, GoalMeta> metaDataMapping;
 
 		public ComponentInjector()
 		{
 			componentRegistrationMapping = [];
+			metaDataMapping = [];
 		}
 
-		public ComponentKindRegistrar<TGoal> For<TGoal>() where TGoal : Goal
+		public KindRegistrar<TGoal> For<TGoal>() where TGoal : Goal
 		{
-			return new ComponentKindRegistrar<TGoal>(this);
+			return new KindRegistrar<TGoal>(this);
 		}
 
 		public ComponentKindRegistrar For(Type goalType)
@@ -33,11 +35,27 @@ namespace Bonsai.Injection
 			return componentRegistrationMapping.Where(_ => _.Key.GetGenericTypeDefinition() == kindType).SelectMany(_ => _.Value.Keys);
 		}
 
-		public readonly record struct ComponentKindRegistrar<TGoal> where TGoal : Goal
+		public GoalMeta ResolveMeta<TGoal>() where TGoal : Goal
+		{
+			if (!metaDataMapping.TryGetValue(typeof(TGoal), out GoalMeta? meta)) throw new InvalidOperationException(); // TODO: injection exception!
+
+			return meta;
+		}
+
+		public GoalMeta ResolveMeta(Type goalType)
+		{
+			if (goalType is null || !goalType.IsAssignableTo(typeof(Goal))) throw new InvalidOperationException(); // TODO: injection exception!
+
+			if (!metaDataMapping.TryGetValue(goalType, out GoalMeta? meta)) throw new InvalidOperationException(); // TODO: injection exception!
+
+			return meta;
+		}
+
+		public readonly record struct KindRegistrar<TGoal> where TGoal : Goal
 		{
 			private readonly ComponentInjector injector;
 
-			public ComponentKindRegistrar(ComponentInjector injector)
+			public KindRegistrar(ComponentInjector injector)
 			{
 				this.injector = injector;
 			}
@@ -58,6 +76,15 @@ namespace Bonsai.Injection
 				if (!goalMapping.TryGetValue(typeof(TGoal), out Type? componentType)) throw new InvalidOperationException(); // TODO: missing injection exception
 
 				return componentType;
+			}
+
+			public void InjectMeta(GoalMeta metaData)
+			{
+				var goalType = typeof(TGoal);
+
+				if (injector.metaDataMapping.ContainsKey(goalType)) throw new InvalidOperationException(); // TODO: injection exception
+
+				injector.metaDataMapping[goalType] = metaData;
 			}
 
 			public readonly record struct ComponentTypeRegistrar<TKind> where TKind : IGoalComponent<TGoal>
