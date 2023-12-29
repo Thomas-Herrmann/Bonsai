@@ -1,20 +1,23 @@
 ﻿@page "/create"
 @using Bonsai.Components.Goals
 @using Bonsai.Injection
+@rendermode InteractiveServer
 
 <h3>Create</h3>
 
 <table class="table">
 	<tbody>
 		<tr>
-			@foreach (Type type in Container!.GetSupportedGoalTypes(typeof(IGoalEditorComponent<>)))
+			@foreach (Type type in Container.GetSupportedGoalTypes(typeof(IGoalEditorComponent<>)))
 			{
 				try
 				{
-					GoalMeta meta = Container!.ResolveMeta(type);
+					GoalMeta meta = Container.ResolveMeta(type);
 
-					<td>
-						<img src="@meta.IconPath" /> @meta.Name
+					<td @onclick="() => ComponentEditorType = Container.For(type).ResolveKind(typeof(IGoalEditorComponent<>).MakeGenericType(type))">
+						<div>
+							<img src="@meta.IconPath" /> @meta.Name
+						</div>
 					</td>
 				}
 				catch (InvalidOperationException) { } // TODO: injection exception
@@ -23,7 +26,14 @@
 	</tbody>
 </table>
 
+@if (ComponentEditorType is not null)
+{
+	<DynamicComponent Type="@ComponentEditorType" />
+}
+
 @code {
 	[CascadingParameter, EditorRequired]
-	public ComponentInjector? Container { get; set; }
+	public required ComponentInjector Container { get; set; }
+
+	private Type? ComponentEditorType { get; set; }
 }

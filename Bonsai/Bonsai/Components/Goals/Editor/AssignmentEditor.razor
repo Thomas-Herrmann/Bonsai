@@ -1,3 +1,7 @@
-﻿<h3>AssignmentEditor</h3>
-
+﻿<EditForm id="AssignmentGoalCreateForm" Model="@Goal">
+	<InputText @bind-Value="Goal!.Title" />
+	<InputTextArea @bind-Value="Goal!.Description" />
+	<InputDate Type="InputDateType.DateTimeLocal" min="@DateTime.Today.ToString("dd-MM-yyyy")" @bind-Value="Goal!.Deadline" />
+	<InputDate Type="InputDateType.DateTimeLocal" min="@DateTime.Today.ToString("dd-MM-yyyy")" @bind-Value="Goal!.CommencementTime" />
+</EditForm>
 
