@@ -8,13 +8,13 @@
 <table class="table">
 	<tbody>
 		<tr>
-			@foreach (Type type in Container.GetSupportedGoalTypes(typeof(IGoalEditorComponent<>)))
+			@foreach (Type type in goalEditorMapping!.Keys)
 			{
 				try
 				{
 					GoalMeta meta = Container.ResolveMeta(type);
 
-					<td @onclick="() => ComponentEditorType = Container.For(type).ResolveKind(typeof(IGoalEditorComponent<>).MakeGenericType(type))">
+					<td @onclick="() => ComponentEditorType = goalEditorMapping[type]">
 						<div>
 							<img src="@meta.IconPath" /> @meta.Name
 						</div>
@@ -32,8 +32,14 @@
 }
 
 @code {
+	private IDictionary<Type, Type>? goalEditorMapping;
+
 	[CascadingParameter, EditorRequired]
 	public required ComponentInjector Container { get; set; }
 
 	private Type? ComponentEditorType { get; set; }
+
+	protected override void OnInitialized() => goalEditorMapping = Container
+		.GetSupportedGoalTypes(typeof(IGoalEditorComponent<>))
+		.ToDictionary(_ => _, goalType => Container.For(goalType).ResolveKind(typeof(IGoalEditorComponent<>).MakeGenericType(goalType)));
 }
