@@ -2,26 +2,23 @@
 @using Bonsai.Components.Goals
 @using Bonsai.Injection
 @using Bonsai.Model
+@using Microsoft.AspNetCore.Components.QuickGrid
+@rendermode InteractiveServer
 
 <PageTitle>Goals</PageTitle>
 
-<table class="table">
-	<tbody>
-		@foreach (Goal goal in goals)
-		{
-			<tr>
-				<DynamicComponent Type="@(Container!.For(goal.GetType()).ResolveKind(typeof(IListSummaryGoalComponent<>).MakeGenericType(goal.GetType())))" Parameters="@(new Dictionary<string, object> { {"Goal", goal} })" />
-			</tr>
-		}
-	</tbody>
-</table>
+<QuickGrid Items="@goals" Virtualize="true">
+	<TemplateColumn Title="Goal" Align="Align.Left">
+		<DynamicComponent Type="@(Container!.For(context.GetType()).ResolveKind(typeof(IListSummaryGoalComponent<>).MakeGenericType(context.GetType())))" Parameters="@(new Dictionary<string, object> { {"Goal", context} })" />
+	</TemplateColumn>
+</QuickGrid>
 
 @code {
-	private IReadOnlyList<Goal> goals = new List<Goal>() 
-	{ 
+	private IQueryable<Goal> goals = new[]
+	{
 		new AssignmentGoal { Title = "One", Deadline = DateTime.Now.AddDays(35), SubGoals = new List<Goal>(), CommencementTime = DateTime.Now.AddDays(5), Description = "Description 1" },
-		new AssignmentGoal { Title = "Two", Deadline = DateTime.UtcNow.AddDays(2), SubGoals = new List<Goal>(), CommencementTime = DateTime.Now, Description = "Description 2" } 
-	};
+		new AssignmentGoal { Title = "Two", Deadline = DateTime.UtcNow.AddDays(2), SubGoals = new List<Goal>(), CommencementTime = DateTime.Now, Description = "Description 2" }
+	}.AsQueryable();
 
 	[CascadingParameter, EditorRequired]
 	public ComponentInjector? Container { get; set; }

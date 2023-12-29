@@ -6,6 +6,7 @@ using Bonsai.Components.Goals.Editor;
 using Bonsai.Components.Goals.Summary;
 using Bonsai.Injection;
 using Bonsai.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bonsai
 {
@@ -25,6 +26,7 @@ namespace Bonsai
                 .AddInteractiveWebAssemblyComponents();
 
             builder.Services.AddCascadingValue(_ => container);
+            builder.Services.AddDbContextFactory<GoalContext>(_ => _.UseSqlite($"Data Source={GoalContext.DatabaseName}.db"));
 
             var app = builder.Build();
 
