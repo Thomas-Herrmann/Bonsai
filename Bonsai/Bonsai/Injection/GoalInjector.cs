@@ -1,17 +1,20 @@
 ﻿using Bonsai.Components.Goals;
 using Bonsai.Model;
+using Bonsai.Persistence;
 
 namespace Bonsai.Injection
 {
-	public class ComponentInjector
+	public class GoalInjector
 	{
 		private Dictionary<Type, Dictionary<Type, Type>> componentRegistrationMapping;
 		private Dictionary<Type, GoalMeta> metaDataMapping;
+		private Dictionary<Type, IDbMapping> dbMapperMapping;
 
-		public ComponentInjector()
+		public GoalInjector()
 		{
 			componentRegistrationMapping = [];
 			metaDataMapping = [];
+			dbMapperMapping = [];
 		}
 
 		public KindRegistrar<TGoal> For<TGoal>() where TGoal : Goal
@@ -51,11 +54,13 @@ namespace Bonsai.Injection
 			return meta;
 		}
 
+		public IEnumerable<IDbMapping> GetDbMappings() => dbMapperMapping.Values;
+
 		public readonly record struct KindRegistrar<TGoal> where TGoal : Goal
 		{
-			private readonly ComponentInjector injector;
+			private readonly GoalInjector injector;
 
-			public KindRegistrar(ComponentInjector injector)
+			public KindRegistrar(GoalInjector injector)
 			{
 				this.injector = injector;
 			}
@@ -87,11 +92,18 @@ namespace Bonsai.Injection
 				injector.metaDataMapping[goalType] = metaData;
 			}
 
+			public void InjectDbMapping(GoalDbMapping<TGoal> dbMapping)
+			{
+				if (injector.dbMapperMapping.ContainsKey(typeof(TGoal))) throw new InvalidOperationException(); // TODO: injection exception
+
+				injector.dbMapperMapping[typeof(TGoal)] = dbMapping;
+			}
+
 			public readonly record struct ComponentTypeRegistrar<TKind> where TKind : IGoalComponent<TGoal>
 			{
-				private readonly ComponentInjector injector;
+				private readonly GoalInjector injector;
 
-				public ComponentTypeRegistrar(ComponentInjector injector)
+				public ComponentTypeRegistrar(GoalInjector injector)
 				{
 					this.injector = injector;
 				}
@@ -118,9 +130,9 @@ namespace Bonsai.Injection
 		public readonly record struct ComponentKindRegistrar
 		{
 			private readonly Type goalType;
-			private readonly ComponentInjector injector;
+			private readonly GoalInjector injector;
 
-			public ComponentKindRegistrar(Type goalType, ComponentInjector injector)
+			public ComponentKindRegistrar(Type goalType, GoalInjector injector)
 			{
 				this.goalType = goalType;
 				this.injector = injector;

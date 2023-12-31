@@ -1,6 +1,7 @@
 ﻿@page "/create"
 @using Bonsai.Components.Goals
 @using Bonsai.Injection
+@inject GoalInjector Container
 @rendermode InteractiveServer
 
 <h3>Create</h3>
@@ -33,9 +34,6 @@
 
 @code {
 	private IDictionary<Type, Type>? goalEditorMapping;
-
-	[CascadingParameter, EditorRequired]
-	public required ComponentInjector Container { get; set; }
 
 	private Type? ComponentEditorType { get; set; }
 

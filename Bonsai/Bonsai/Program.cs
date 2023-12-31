@@ -6,6 +6,7 @@ using Bonsai.Components.Goals.Editor;
 using Bonsai.Components.Goals.Summary;
 using Bonsai.Injection;
 using Bonsai.Model;
+using Bonsai.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bonsai
@@ -14,7 +15,7 @@ namespace Bonsai
     {
         public static void Main(string[] args)
         {
-            var container = new ComponentInjector();
+            var container = new GoalInjector();
 
             RegisterComponents(container);
 
@@ -25,10 +26,14 @@ namespace Bonsai
                 .AddInteractiveServerComponents()
                 .AddInteractiveWebAssemblyComponents();
 
-            builder.Services.AddCascadingValue(_ => container);
-            builder.Services.AddDbContextFactory<GoalContext>(_ => _.UseSqlite($"Data Source={GoalContext.DatabaseName}.db"));
+            builder.Services.AddDbContextFactory<GoalContext>(_ => _.UseSqlite($"Data Source={GoalContext.DatabaseName}"));
+            builder.Services.AddQuickGridEntityFrameworkAdapter();
+			builder.Services.AddSingleton(container);
+            builder.Services.AddScoped<UnitOfWork>();
 
             var app = builder.Build();
+
+            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -55,12 +60,13 @@ namespace Bonsai
             app.Run();
         }
 
-        private static void RegisterComponents(ComponentInjector injector)
+        private static void RegisterComponents(GoalInjector injector)
         {
             injector.For<AssignmentGoal>().OfKind<IGoalDetailsComponent<AssignmentGoal>>().Inject<AssignmentDetails>();
             injector.For<AssignmentGoal>().OfKind<IListSummaryGoalComponent<AssignmentGoal>>().Inject<AssignmentListSummary>();
             injector.For<AssignmentGoal>().OfKind<IGoalEditorComponent<AssignmentGoal>>().Inject<AssignmentEditor>();
             injector.For<AssignmentGoal>().InjectMeta(new GoalMeta { Name = "Assignment", Description = "A task that must be completed due a specified deadline", IconPath = "/images/deadline.png" });
+            injector.For<AssignmentGoal>().InjectDbMapping(new AssignmentDbMapping());
 
             injector.For<AppointmentGoal>().OfKind<IGoalEditorComponent<AppointmentGoal>>().Inject<AppointmentEditor>();
             injector.For<AppointmentGoal>().InjectMeta(new GoalMeta { Name = "Appointment", Description = "A task that must be completed at a specified time", IconPath = "/images/deadline.png" });

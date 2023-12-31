@@ -1,25 +1,39 @@
 ﻿@page "/"
+@using Bonsai.Persistence
+@using Microsoft.EntityFrameworkCore
 @using Bonsai.Components.Goals
 @using Bonsai.Injection
 @using Bonsai.Model
 @using Microsoft.AspNetCore.Components.QuickGrid
+@inject IDbContextFactory<GoalContext> DbContextFactory
+@inject GoalInjector Container
+@inject UnitOfWork unitOfWork;
+@implements IAsyncDisposable
 @rendermode InteractiveServer
 
 <PageTitle>Goals</PageTitle>
 
 <QuickGrid Items="@goals" Virtualize="true">
 	<TemplateColumn Title="Goal" Align="Align.Left">
-		<DynamicComponent Type="@(Container!.For(context.GetType()).ResolveKind(typeof(IListSummaryGoalComponent<>).MakeGenericType(context.GetType())))" Parameters="@(new Dictionary<string, object> { {"Goal", context} })" />
+		<DynamicComponent Type="@(Container.For(context.GetType()).ResolveKind(typeof(IListSummaryGoalComponent<>).MakeGenericType(context.GetType())))" Parameters="@(new Dictionary<string, object> { {"Goal", context} })" />
 	</TemplateColumn>
 </QuickGrid>
 
 @code {
-	private IQueryable<Goal> goals = new[]
-	{
-		new AssignmentGoal { Title = "One", Deadline = DateTime.Now.AddDays(35), SubGoals = new List<Goal>(), CommencementTime = DateTime.Now.AddDays(5), Description = "Description 1" },
-		new AssignmentGoal { Title = "Two", Deadline = DateTime.UtcNow.AddDays(2), SubGoals = new List<Goal>(), CommencementTime = DateTime.Now, Description = "Description 2" }
-	}.AsQueryable();
+	private IQueryable<Goal> goals = Array.Empty<Goal>().AsQueryable();
+	private UnitOfWork.GoalQuerrier? goalQuerrier;
 
-	[CascadingParameter, EditorRequired]
-	public ComponentInjector? Container { get; set; }
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+
+		goalQuerrier = await unitOfWork.MakeGoalQueryAsync();
+
+		goals = goalQuerrier.Goals;
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		await goalQuerrier!.DisposeAsync();
+	}
 }
