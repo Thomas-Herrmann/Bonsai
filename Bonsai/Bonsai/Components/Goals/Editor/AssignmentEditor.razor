@@ -3,10 +3,27 @@
 @inject UnitOfWork unitOfWork;
 
 <EditForm id="AssignmentGoalCreateForm" OnSubmit="@CreateAsync" Model="@Goal">
-	<InputText @bind-Value="Goal!.Title" />
-	<InputTextArea @bind-Value="Goal!.Description" />
-	<InputDate Type="InputDateType.DateTimeLocal" min="@DateTime.Today.ToString("dd-MM-yyyy")" @bind-Value="Goal!.Deadline" />
-	<InputDate Type="InputDateType.DateTimeLocal" min="@DateTime.Today.ToString("dd-MM-yyyy")" @bind-Value="Goal!.CommencementTime" />
-	<button type="submit">Create</button>
+	<Label>Title</Label>
+	<Blazorise.Row>
+		<InputText @bind-Value="Goal!.Title" />
+	</Blazorise.Row>
+	<Label>Description</Label>
+	<Blazorise.Row>
+		<InputTextArea @bind-Value="Goal!.Description" />
+	</Blazorise.Row>
+	<Label>Deadline</Label>
+	<Blazorise.Row>
+		<InputDate Type="InputDateType.DateTimeLocal" min="@DateTime.Today.ToString("dd-MM-yyyy")" @bind-Value="Goal!.Deadline" />
+	</Blazorise.Row>
+	<Label>Commencement</Label>
+	<Blazorise.Row>
+		<InputDate Type="InputDateType.DateTimeLocal" min="@DateTime.Today.ToString("dd-MM-yyyy")" @bind-Value="Goal!.CommencementTime" />
+	</Blazorise.Row>
+	<Blazorise.Row>
+		<Column ColumnSize="ColumnSize.Is10" />
+		<Column ColumnSize="ColumnSize.Is2">
+			<button type="submit">Create</button>
+		</Column>
+	</Blazorise.Row>
 </EditForm>
 

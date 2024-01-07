@@ -8,6 +8,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bonsai.Client\Bonsai.Client.csproj" />
+    <PackageReference Include="Blazorise" Version="1.4.0" />
+    <PackageReference Include="Blazorise.Bootstrap" Version="1.4.0" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />

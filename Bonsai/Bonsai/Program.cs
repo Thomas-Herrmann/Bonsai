@@ -7,7 +7,11 @@ using Bonsai.Components.Goals.Summary;
 using Bonsai.Injection;
 using Bonsai.Model;
 using Bonsai.Persistence;
+using Bonsai.Persistence.Goals;
 using Microsoft.EntityFrameworkCore;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
 
 namespace Bonsai
 {
@@ -30,10 +34,9 @@ namespace Bonsai
             builder.Services.AddQuickGridEntityFrameworkAdapter();
 			builder.Services.AddSingleton(container);
             builder.Services.AddScoped<UnitOfWork>();
+            builder.Services.AddBlazorise(_ => _.Immediate = true).AddBootstrapProviders().AddFontAwesomeIcons();
 
             var app = builder.Build();
-
-            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

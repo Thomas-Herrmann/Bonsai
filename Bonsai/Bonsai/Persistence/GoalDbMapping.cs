@@ -10,13 +10,4 @@ namespace Bonsai.Persistence
 
 		protected abstract void BuildMapping(EntityTypeBuilder<TGoal> mappingBuilder);
 	}
-
-	public class AssignmentDbMapping : GoalDbMapping<AssignmentGoal>
-	{
-		protected override void BuildMapping(EntityTypeBuilder<AssignmentGoal> mappingBuilder)
-		{
-			mappingBuilder.Property(_ => _.Title).UseCollation("nocase");
-			mappingBuilder.Property(_ => _.Description);
-		}
-	}
 }

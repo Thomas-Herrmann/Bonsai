@@ -24,7 +24,9 @@ namespace Bonsai.Persistence
 
             modelBuilder.Entity<Goal>().HasKey(_ => _.Id);
             modelBuilder.Entity<Goal>().Property(_ => _.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Goal>().ToTable(nameof(Goal));
+			modelBuilder.Entity<Goal>().Property(_ => _.Title).UseCollation("nocase");
+			modelBuilder.Entity<Goal>().Property(_ => _.Description);
+			modelBuilder.Entity<Goal>().ToTable(nameof(Goal));
 
             foreach (IDbMapping mapping in container.GetDbMappings()) mapping.BuildMapping(modelBuilder);
         }
